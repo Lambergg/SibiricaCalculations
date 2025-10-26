@@ -32,7 +32,7 @@ async def index(request: Request, id: int | None = None):
 
 # Запуск основного приложения через сервер Uvicorn
 if __name__ == "__main__":
-    uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
 # Аргументы:
     # main:app — путь к главному приложению (название файла и переменная app)
     # host="127.0.0.1" — адрес прослушивания
