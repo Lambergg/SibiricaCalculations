@@ -1,0 +1,37 @@
+<!doctype html>
+<html><head>
+		<!--
+			Кодировка страницы
+			Заголовок страницы (Название вкладки)
+			Ссылки на CSS стили
+		-->
+		<meta charset="UTF-8">
+		<meta name="Description" content="Калькулятор по расчёту мульчи">
+		<meta name="Keywords" content="материалы, расчёт материалов">
+		<meta name="author" content="Краснов Иван Игоревич">
+		<meta name="generator" content="Dreamweaver">
+		
+		<title>Сибирица. Калькулятор мульчи.</title>
+		<link href="{{ url_for('static', path='index.css') }}" rel="stylesheet" type="text/css">
+		<link rel="stylesheet" href="{{ url_for('static', path='bootstrap-5.3.2-dist/css/bootstrap.min.css') }}">
+		<link rel="icon" type="image/x-icon" href="{{ url_for('static', path='Picture/favicon.ico') }}">
+	</head>
+	
+<body>
+<header>
+<div class="header">
+	<h1>Калькулятор мульчи.</h1>
+<div>
+	<img src="{{ url_for('static', path='Picture/logo735150.png.webp') }}" alt="Логотип" class="logo">
+</div>	
+</div>
+</header>
+<main>
+<div>
+	<button class="button" onclick="window.location.href='/Calculations'">Рассчитать</button>
+</div>
+</main>
+<footer>
+</footer>
+</body>
+</html>
