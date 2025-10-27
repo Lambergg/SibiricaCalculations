@@ -6,4 +6,5 @@ class CalculationsSchema(BaseModel):
     """
     square: float | None
     fraction: str | None
+    fraction2: str | None
     type_m: str | None

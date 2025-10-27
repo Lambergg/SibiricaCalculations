@@ -14,6 +14,7 @@
 
 		<title>Рассчёты</title>
 		<link href="{{ url_for('static', path='Calculations.css') }}" rel="stylesheet" type="text/css">
+        <link href="{{ url_for('static', path='table.css') }}" rel="stylesheet" type="text/css">
 		<link rel="stylesheet" href="{{ url_for('static', path='bootstrap-5.3.2-dist/css/bootstrap.min.css') }}">
 		<link rel="icon" type="image/x-icon" href="{{ url_for('static', path='Picture/favicon.ico') }}">
 	</head>
@@ -31,7 +32,37 @@
 </header>
 <main class="container mt-4">
     <h2>Расчёты</h2>
-    <p>Для расчёта мульчи введите площадь, фракцию в формате (0-1 и.т.п), и материал в формате (С-Сосна или Л-Лиственница).</p>
+    <p>Для расчёта мульчи введите площадь, фракцию в формате (0-1 и.т.п), и материал в формате (С-Сосна или Л-Лиственница).<br>
+    Если нужна одна фракция для расчёта во втором поле оставить 0</p>
+    <h3>Мульча</h3>
+		<table class="pricelist">
+			<caption>Фракции</caption>
+			<thead>
+			<tr><th>Мульча</th><th>Фракции</th></tr>
+			</thead>
+			<tbody>
+			<tr><th colspan="2">Сосна</th></tr>
+			</tbody>
+			<tr><td>Кора</td><td>0-1 см.</td></tr>
+			<tr><td>Кора</td><td>0-7 см.</td></tr>
+            <tr><td>Кора</td><td>1-5 см.</td></tr>
+            <tr><td>Кора</td><td>2-4 см.</td></tr>
+            <tr><td>Кора</td><td>3-6 см.</td></tr>
+            <tr><td>Кора</td><td>5-7 см.</td></tr>
+            <tr><td>Кора</td><td>5-10 см.</td></tr>
+
+			<tr><th colspan="2">Лиственница</th></tr>
+			<tr><td>Кора</td><td>0-2 см.</td></tr>
+			<tr><td>Кора</td><td>2-4 см.</td></tr>
+            <tr><td>Кора</td><td>3-6 см.</td></tr>
+            <tr><td>Кора</td><td>6-10 см.</td></tr>
+            <tr><td>Кора</td><td>10+ см.</td></tr>
+
+			<tfoot>
+			<tr><th colspan="2">Всего 12 нименований</th></tr>
+			</tfoot>
+		</table>
+
     <form method="post" action="/Calculations">
         <div class="row g-3">
             <div class="col-md-6">
@@ -39,8 +70,12 @@
                 <input type="number" step="0.1" class="form-control" id="square" name="square" placeholder="Площадь" autocomplete="on" value="0">
             </div>
             <div class="col-md-6">
-                <label for="fraction" class="form-label">Фракция мульчи</label>
-                <input type="text" class="form-control" id="fraction" name="fraction" placeholder="Фракция" autocomplete="on" value="0-1">
+                <label for="fraction" class="form-label">Фракция мульчи 1</label>
+                <input type="text" class="form-control" id="fraction" name="fraction" placeholder="Фракция" autocomplete="on" value="0">
+            </div>
+            <div class="col-md-6">
+                <label for="fraction2" class="form-label">Фракция мульчи 2</label>
+                <input type="text" class="form-control" id="fraction2" name="fraction2" placeholder="Фракция" autocomplete="on" value="0">
             </div>
             <div class="col-md-6">
                 <label for="type_m" class="form-label">Вид древисины</label>
@@ -50,10 +85,13 @@
 
         <div class="row mb-3 justify-content-between">
             <div class="col-auto">
-                <label for="square_mulch" class="form-label">Мульчи понадобиться: {{ square_mulch }} мешков.</label>
+                <label for="square_mulch" class="form-label">Мелкой мульчи понадобиться: {{ square_mulch }} мешков.</label>
             </div>
             <div class="col-auto">
-                <label for="price" class="form-label">Стоймость составит: {{ price }} руб.</label>
+                <label for="square_mulch" class="form-label">Крупной мульчи понадобиться: {{ square_mulch2 }} мешков.</label>
+            </div>
+            <div class="col-auto">
+                <label for="price" class="form-label">Итоговая стоймость составит: {{ price }} руб.</label>
             </div>
         </div>
 

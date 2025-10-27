@@ -50,30 +50,40 @@ async def calculate_l(square: float, fraction: str) -> float:
             return 0
 
 
-async def price_s(clak_amount: float, fraction: str) -> float:
-    """Рассчитать цену сосны с учётом количества мешков."""
-    base_prices = {
+async def price_total_s(s_clak: float, fraction: str, s_clak2: float, fraction2: str) -> float:
+    """Общая функция для расчета общей цены с учетом обоих видов фракций"""
+    prices = {
         "0-1": 270,
         "0-7": 300,
         "1-5": 370,
         "2-4": 470,
         "3-6": 510,
         "5-7": 530,
-        "5-10": 750
+        "5-10": 750,
     }
-    return clak_amount * base_prices.get(fraction, 0)
+
+    total_price = (
+            s_clak * prices.get(fraction, 0) +
+            s_clak2 * prices.get(fraction2, 0)
+    )
+    return total_price
 
 
-async def price_l(clak_amount: float, fraction: str) -> float:
-    """Рассчитать цену лиственницы с учётом количества мешков."""
-    base_prices = {
+async def price_total_l(l_clak: float, fraction: str, l_clak2: float, fraction2: str) -> float:
+    """Общая функция для расчета общей цены с учетом обоих видов фракций"""
+    prices = {
         "0-2": 430,
         "2-4": 490,
         "3-6": 530,
         "6-10": 550,
         "10+": 600
     }
-    return clak_amount * base_prices.get(fraction, 0)
+
+    total_price = (
+            l_clak * prices.get(fraction, 0) +
+            l_clak2 * prices.get(fraction2, 0)
+    )
+    return total_price
 
 
 # Основная функция расчета
@@ -81,26 +91,33 @@ async def main_calculation(data: CalculationsSchema) -> dict[str, float]:
     # Получаем исходные данные
     square = data.square
     fraction = data.fraction
+    fraction2 = data.fraction2
     type_m = data.type_m
 
     # 1. Рассчитываем мульчу сосны
     s_clak = await calculate_s(square, fraction)
+    s_clak2 = await calculate_s(square, fraction2)
     l_clak = await calculate_l(square, fraction)
-    s_price = await price_s(s_clak, fraction)
-    l_price = await price_l(l_clak, fraction)
+    l_clak2 = await calculate_l(square, fraction2)
+    s_price = await price_total_s(s_clak, fraction, s_clak2, fraction2)
+    l_price = await price_total_l(l_clak, fraction, l_clak2, fraction2)
 
     # 2. Округляем результаты до 3-х знаков после запятой
     rounded_s_clak = round(s_clak, 3)
+    rounded_s_clak2 = round(s_clak2, 3)
     rounded_l_clak = round(l_clak, 3)
+    rounded_l_clak2 = round(l_clak2, 3)
     rounded_s_price = round(s_price, 3)
     rounded_l_price = round(l_price, 3)
 
     result = {}
     if type_m == "С":
         result['square_mulch'] = rounded_s_clak
+        result['square_mulch2'] = rounded_s_clak2
         result['price'] = rounded_s_price
     elif type_m == "Л":
         result['square_mulch'] = rounded_l_clak
+        result['square_mulch2'] = rounded_l_clak2
         result['price'] = rounded_l_price
     else:
         raise HTTPException(status_code=400, detail="Тип материала указан неверно.")
@@ -113,6 +130,7 @@ async def calculations_post(
         request: Request,
         square: float = Form(...),
         fraction: str = Form(...),
+        fraction2: str = Form(...),
         type_m: str = Form(...)
 ):
     """
@@ -130,6 +148,7 @@ async def calculations_post(
         data = CalculationsSchema(
             square=square,
             fraction=fraction,
+            fraction2=fraction2,
             type_m=type_m,
         )
 
