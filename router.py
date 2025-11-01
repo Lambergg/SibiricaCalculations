@@ -6,6 +6,7 @@ from fastapi.responses import RedirectResponse
 import math
 from typing import Annotated  # Аннотации типов
 from schemas import CalculationsSchema  # Валидная схема для расчётов
+from functools import lru_cache
 
 # Создание роутера для организации путей
 router = APIRouter(tags=["Остальные страницы приложения"])
@@ -23,7 +24,7 @@ async def Calculations(request: Request, id: int | None = None):
     """
     return templates.TemplateResponse("Calculations.html", {"request": request})
 
-
+@lru_cache(maxsize=10)
 async def calculate_s(square: float, fraction: str) -> float:
     """Рассчитать кол-во мульчи сосны на площадь."""
     match fraction:
@@ -36,7 +37,7 @@ async def calculate_s(square: float, fraction: str) -> float:
         case _:
             return 0
 
-
+@lru_cache(maxsize=10)
 async def calculate_l(square: float, fraction: str) -> float:
     """Рассчитать кол-во мульчи лиственницы на площадь."""
     match fraction:
@@ -49,7 +50,7 @@ async def calculate_l(square: float, fraction: str) -> float:
         case _:
             return 0
 
-
+@lru_cache(maxsize=10)
 async def price_total_s(s_clak: float, fraction: str, s_clak2: float, fraction2: str) -> float:
     """Общая функция для расчета общей цены с учетом обоих видов фракций"""
     prices = {
@@ -68,7 +69,7 @@ async def price_total_s(s_clak: float, fraction: str, s_clak2: float, fraction2:
     )
     return total_price
 
-
+@lru_cache(maxsize=10)
 async def price_total_l(l_clak: float, fraction: str, l_clak2: float, fraction2: str) -> float:
     """Общая функция для расчета общей цены с учетом обоих видов фракций"""
     prices = {
@@ -87,6 +88,7 @@ async def price_total_l(l_clak: float, fraction: str, l_clak2: float, fraction2:
 
 
 # Основная функция расчета
+@lru_cache(maxsize=10)
 async def main_calculation(data: CalculationsSchema) -> dict[str, float]:
     # Получаем исходные данные
     square = data.square
